@@ -1,0 +1,411 @@
+openapi: 3.0.0
+info:
+  title: Technical Assessment
+  description: "An API to run the game which is designed by Sid Sackson. \n"
+  contact:
+    name: Paul Uncangco
+    email: islandertron@gmail.com
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /initalize:
+    get:
+      tags:
+      - initalization
+      summary: Start the game
+      operationId: initalizeGET
+      responses:
+        "200":
+          description: Start the game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitalizeGame'
+      x-swagger-router-controller: Initalization
+  /node_clicked:
+    get:
+      tags:
+      - node
+      summary: Clicked on node
+      operationId: node_clickedGET
+      responses:
+        "200":
+          description: A JSON array of node's corration
+          content:
+            applicatoin/json:
+              schema:
+                $ref: '#/components/schemas/NodeClicked'
+        "404":
+          description: resource not found
+          content:
+            applicatoin/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Node
+  /valid_start_node:
+    get:
+      tags:
+      - node
+      summary: Valid the second node
+      operationId: valid_start_nodeGET
+      responses:
+        "200":
+          description: Click the second node after first node.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValideStartNode'
+        "404":
+          description: resource not found
+          content:
+            applicatoin/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Node
+  /invalid_start_node:
+    get:
+      tags:
+      - node
+      summary: Invalid the second node
+      operationId: invalid_start_nodeGET
+      responses:
+        "200":
+          description: Invalid the second node.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidStartNode'
+        "404":
+          description: resource not found
+          content:
+            applicatoin/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Node
+  /valid_end_node:
+    get:
+      tags:
+      - node
+      summary: Select a second node
+      operationId: valid_end_nodeGET
+      responses:
+        "200":
+          description: Second node
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidEndNode'
+        "404":
+          description: resource not found
+          content:
+            applicatoin/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Node
+  /invalid_end_node:
+    get:
+      tags:
+      - node
+      summary: Invalid line
+      operationId: invalid_end_nodeGET
+      responses:
+        "201":
+          description: Invalid line
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidEndNode'
+        "404":
+          description: resource not found
+          content:
+            applicatoin/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Node
+  /update_text:
+    post:
+      tags:
+      - Move
+      summary: Inform the player to make their move
+      description: Remind the player to make their move
+      operationId: update_textPOST
+      responses:
+        "200":
+          description: Update the text
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateText'
+      x-swagger-router-controller: Move
+components:
+  schemas:
+    InitalizeGame:
+      properties:
+        msg:
+          type: string
+          example: INITALIZE
+        body:
+          $ref: '#/components/schemas/IntializeBody'
+      example:
+        msg: INITALIZE
+        body:
+          newLine: newLine
+          heading: Player 1
+          message: Awaiting Player 1's Move
+    IntializeBody:
+      properties:
+        newLine:
+          type: string
+        heading:
+          type: string
+          example: Player 1
+        message:
+          type: string
+          example: Awaiting Player 1's Move
+      example:
+        newLine: newLine
+        heading: Player 1
+        message: Awaiting Player 1's Move
+    UpdateText:
+      properties:
+        msg:
+          type: string
+          example: UPDATE_TEXT
+        body:
+          $ref: '#/components/schemas/UpdateTextBody'
+      example:
+        msg: UPDATE_TEXT
+        body:
+          newLine: newLine
+          heading: Player 2
+          message: Are you asleep?
+    UpdateTextBody:
+      properties:
+        newLine:
+          type: string
+        heading:
+          type: string
+          example: Player 2
+        message:
+          type: string
+          example: Are you asleep?
+      example:
+        newLine: newLine
+        heading: Player 2
+        message: Are you asleep?
+    InvalidEndNode:
+      properties:
+        msg:
+          type: string
+          example: INVALID_END_NODE
+        body:
+          $ref: '#/components/schemas/InvalidEndNodeBody'
+      example:
+        msg: INVALID_END_NODE
+        body:
+          newLine: newLine
+          heading: Player 2
+          message: Invalid
+    InvalidEndNodeBody:
+      properties:
+        newLine:
+          type: string
+        heading:
+          type: string
+          example: Player 2
+        message:
+          type: string
+          example: Invalid
+      example:
+        newLine: newLine
+        heading: Player 2
+        message: Invalid
+    ValidEndNode:
+      properties:
+        msg:
+          type: string
+          example: VALID_END_NODE
+        body:
+          $ref: '#/components/schemas/ValidEndNodeBody'
+      example:
+        msg: VALID_END_NODE
+        body:
+          newLine:
+            start:
+              x: 0
+              y: 3
+            end:
+              x: 4
+              y: 4
+          heading: Player 1
+          message: message
+    ValidEndNodeBody:
+      properties:
+        newLine:
+          $ref: '#/components/schemas/Line'
+        heading:
+          type: string
+          example: Player 1
+        message:
+          type: string
+      example:
+        newLine:
+          start:
+            x: 0
+            y: 3
+          end:
+            x: 4
+            y: 4
+        heading: Player 1
+        message: message
+    InvalidStartNode:
+      properties:
+        msg:
+          type: string
+          example: INVALID_START_NODE
+        body:
+          $ref: '#/components/schemas/InvalidBody'
+      example:
+        msg: INVALID_START_NODE
+        body:
+          newLine: newLine
+          heading: Player 2
+          message: Not a valid starting position
+    InvalidBody:
+      properties:
+        newLine:
+          type: string
+        heading:
+          type: string
+          example: Player 2
+        message:
+          type: string
+          example: Not a valid starting position
+      example:
+        newLine: newLine
+        heading: Player 2
+        message: Not a valid starting position
+    ValideStartNode:
+      properties:
+        msg:
+          type: string
+          example: VALID_START_NODE
+        body:
+          $ref: '#/components/schemas/ValidBody'
+      example:
+        msg: VALID_START_NODE
+        body:
+          newLine: newLine
+          heading: Player 2
+          message: Select a second node to complete the line.
+    ValidBody:
+      properties:
+        newLine:
+          type: string
+        heading:
+          type: string
+          example: Player 2
+        message:
+          type: string
+          example: Select a second node to complete the line.
+      example:
+        newLine: newLine
+        heading: Player 2
+        message: Select a second node to complete the line.
+    NodeClicked:
+      properties:
+        msg:
+          type: string
+          example: NODE_CLICKED
+        body:
+          $ref: '#/components/schemas/PointStart'
+      example:
+        msg: NODE_CLICKED
+        body:
+          x: 0
+          y: 3
+    Line:
+      properties:
+        start:
+          $ref: '#/components/schemas/PointStart'
+        end:
+          $ref: '#/components/schemas/PointEnd'
+      example:
+        start:
+          x: 0
+          y: 3
+        end:
+          x: 4
+          y: 4
+    PointStart:
+      required:
+      - x
+      - "y"
+      properties:
+        x:
+          type: number
+          example: 0
+        y:
+          type: number
+          example: 3
+      example:
+        x: 0
+        y: 3
+    PointEnd:
+      required:
+      - x
+      - "y"
+      properties:
+        x:
+          type: number
+          example: 4
+        y:
+          type: number
+          example: 4
+      example:
+        x: 4
+        y: 4
+    Error:
+      required:
+      - message
+      properties:
+        code:
+          type: integer
+          description: "This will be a 4-digit code supplementary to the standard\n\
+            2xx, 4xx HTTP status codes. These will provide more specific\ndetails\
+            \ as to the error.\n"
+          example: 1001
+        message:
+          type: string
+          example: Could not connect to database
