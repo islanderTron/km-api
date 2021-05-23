@@ -1,24 +1,80 @@
-'use strict';
+const express = require('express');
+const app = express();
+const port = 8000;
+const cors = require('cors');
 
-var path = require('path');
-var http = require('http');
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors({ 
+  credentials: true
+}));
 
-var oas3Tools = require('oas3-tools');
-var serverPort = 8080;
-
-// swaggerRouter configuration
-var options = {
-    routing: {
-        controllers: path.join(__dirname, './controllers')
-    },
-};
-
-var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
-var app = expressAppConfig.getApp();
-
-// Initialize the Swagger middleware
-http.createServer(app).listen(serverPort, function () {
-    console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
-    console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
+app.get('/initalize', (req, res) => {
+  res.json({
+    msg: 'INITIALIZE',
+    body: {
+      newLine: null,
+      heading: 'Player 1',
+      message: "Awaiting Player 1's move"
+    }
+  });
 });
 
+app.post('/node-clicked', (req, res) => {
+  res.json({
+    msg: 'VALID_START_NODE',
+    body: {
+      newLine: null,
+      message: null,
+      heading: req.body.data.currentPlayer,
+    }
+  });
+});
+
+app.post('/invalid-start-node', (req, res) => {
+  res.json({
+    msg: "INVALID_START_NODE",
+    body: {
+      newLine: null,
+      heading: req.body.data.currentPlayer,
+      message: "Not a valid starting postion"
+    }
+  });
+});
+
+app.post('/valid-end-node', (req, res) => {
+  res.json({
+    msg: "VALID_END_NODE",
+    body: {
+      newLine: req.body.data.nodes,
+      heading: req.body.data.currentPlayer,
+      message: null
+    }
+  });
+});
+
+app.post('/invalid-end-node', (req, res) => {
+  res.json({
+    msg: 'INVALID_END_NODE',
+    body: {
+      newLine: null,
+      heading: req.body.data.currentPlayer,
+      message: "Invalid move!"
+    }
+  })
+})
+
+app.post('/game-over', (req, res) => {
+  res.json({
+    msg: "GAME_OVER",
+    body: {
+      newLine: req.body.data.nodes,
+      heading: "Game Over",
+      message: req.body.data.currentPlayer
+    }
+  })
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`)
+})
